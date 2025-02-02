@@ -1,0 +1,28 @@
+html,body {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+}
+
+h1{
+  text-align: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+button{
+  background-color: rgb(52, 134, 134);
+  color: white;
+  width: 8rem;
+  height: 2rem;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin-left: 20rem;
+}
+
+button:hover{
+  cursor: pointer;
+  background-color: whitesmoke;
+  color: rgb(52, 134, 134);;
+}
