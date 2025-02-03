@@ -1,30 +1,64 @@
-import React, { useCallback, useState } from "react";
-import {
+import React, { useState } from "react";
+import  {
   ReactFlow,
   useNodesState,
   useEdgesState,
-  addEdge,
+  Handle,
+  Position,
+  Controls,
+  Background
 } from "@xyflow/react";
-
+import { Resizable } from "react-resizable";  // Install react-resizable for resizing nodes
 import "@xyflow/react/dist/style.css";
+import "react-resizable/css/styles.css";
 
 const initialNodes = [
-  { id: "1", position: { x: 250, y: 5 }, data: { label: "1" } }
+  {
+    id: "1",
+    position: { x: 250, y: 5 },
+    data: { label: "Hello" },
+    style: { width: 150, height: 80 },
+    resizable: true,
+  },
 ];
 
 const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+
+function CustomNode({ id, data }) {
+  return (
+    <Resizable
+      width={150}
+      height={80}
+      minConstraints={[120, 80]}
+      maxConstraints={[300, 200]}
+    >
+      <div
+        style={{
+          padding: "10px",
+          backgroundColor: "#fff",
+          borderRadius: "4px",
+          border: "1px solid #ccc",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          position: "relative",
+        }}
+      >
+        {data.label}
+        <Handle type="target" position={Position.Top} />
+        <Handle type="source" position={Position.Bottom} />
+      </div>
+    </Resizable>
+  );
+}
 
 function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [connectionStart, setConnectionStart] = useState(null);
 
-  // Track the node where connection starts
   const onConnectStart = (_, { nodeId }) => {
     setConnectionStart(nodeId);
   };
 
-  // When clicking on the pane, create a new node and connect it
   const onPaneClick = (event) => {
     if (!connectionStart) return;
 
@@ -39,6 +73,7 @@ function App() {
       id: newNodeId,
       position,
       data: { label: newNodeId },
+      style: { width: 150, height: 80 },
     };
 
     setNodes((nds) => [...nds, newNode]);
@@ -62,8 +97,13 @@ function App() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnectStart={onConnectStart}
-        onPaneClick={onPaneClick} // Now listens for clicks to create new nodes!
-      />
+        onPaneClick={onPaneClick}
+        nodeTypes={{ custom: CustomNode }}
+        fitView
+      >
+        <Controls />
+        <Background />
+      </ReactFlow>
     </div>
   );
 }
